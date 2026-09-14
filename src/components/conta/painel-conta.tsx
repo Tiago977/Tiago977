@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { KeyRound, Loader2, LogOut } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import { criarClienteNavegador } from "@/lib/supabase/client";
 import { Botao, Campo, Painel, Rotulo } from "@/components/ui";
+import { FormularioSenha } from "./formulario-senha";
 
 export function PainelConta({
   nomeInicial,
@@ -16,16 +17,14 @@ export function PainelConta({
   const router = useRouter();
 
   const [nome, setNome] = useState(nomeInicial);
-  const [senha, setSenha] = useState("");
-  const [repetir, setRepetir] = useState("");
-  const [salvando, setSalvando] = useState<"nome" | "senha" | null>(null);
+  const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
 
   async function salvarNome() {
     setErro(null);
     setAviso(null);
-    setSalvando("nome");
+    setSalvando(true);
     try {
       const supabase = criarClienteNavegador();
       const { data: sessao } = await supabase.auth.getUser();
@@ -42,31 +41,7 @@ export function PainelConta({
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Não foi possível salvar.");
     } finally {
-      setSalvando(null);
-    }
-  }
-
-  async function salvarSenha() {
-    setErro(null);
-    setAviso(null);
-
-    if (senha.length < 6) return setErro("A senha precisa ter ao menos 6 caracteres.");
-    if (senha !== repetir) return setErro("As duas senhas não são iguais.");
-
-    setSalvando("senha");
-    try {
-      const supabase = criarClienteNavegador();
-      const { error } = await supabase.auth.updateUser({ password: senha });
-      if (error) throw new Error(error.message);
-
-      setSenha("");
-      setRepetir("");
-      setAviso("Senha definida. Agora você pode entrar com e-mail e senha.");
-      router.refresh();
-    } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível definir a senha.");
-    } finally {
-      setSalvando(null);
+      setSalvando(false);
     }
   }
 
@@ -83,58 +58,23 @@ export function PainelConta({
           <Campo value={nome} onChange={(e) => setNome(e.target.value)} />
         </label>
 
-        <Botao onClick={salvarNome} disabled={salvando !== null || !nome.trim()}>
-          {salvando === "nome" ? <Loader2 className="size-4 animate-spin" /> : null}
+        {erro ? <p className="text-[13px] text-perigo">{erro}</p> : null}
+        {aviso ? <p className="text-[13px] text-sucesso">{aviso}</p> : null}
+
+        <Botao onClick={salvarNome} disabled={salvando || !nome.trim()}>
+          {salvando ? <Loader2 className="size-4 animate-spin" /> : null}
           Salvar nome
         </Botao>
       </Painel>
 
       <Painel className="space-y-4 p-4">
         <div>
-          <h2 className="text-sm font-semibold">Senha</h2>
+          <h2 className="text-sm font-semibold">Trocar senha</h2>
           <p className="mt-0.5 text-[13px] text-texto-suave">
-            Defina uma senha para entrar sem depender do link por e-mail. Se já tiver
-            uma, isto a substitui.
+            Vale também para quem entrou por link e ainda não tem senha.
           </p>
         </div>
-
-        <label className="block">
-          <Rotulo>Nova senha</Rotulo>
-          <Campo
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            placeholder="Mínimo de 6 caracteres"
-            autoComplete="new-password"
-          />
-        </label>
-
-        <label className="block">
-          <Rotulo>Repita a senha</Rotulo>
-          <Campo
-            type="password"
-            value={repetir}
-            onChange={(e) => setRepetir(e.target.value)}
-            autoComplete="new-password"
-          />
-        </label>
-
-        {erro ? <p className="text-[13px] text-perigo">{erro}</p> : null}
-        {aviso ? <p className="text-[13px] text-sucesso">{aviso}</p> : null}
-
-        <Botao
-          variante="solido"
-          className="w-full"
-          onClick={salvarSenha}
-          disabled={salvando !== null}
-        >
-          {salvando === "senha" ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <KeyRound className="size-4" />
-          )}
-          Salvar senha
-        </Botao>
+        <FormularioSenha aoConcluir="/conta" />
       </Painel>
 
       <form action="/auth/sair" method="post">

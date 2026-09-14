@@ -9,6 +9,13 @@ import { validarEmail } from "@/lib/ui";
 
 type Modo = "entrar" | "criar";
 
+const ERROS: Record<string, string> = {
+  "outro-navegador":
+    "O link precisa ser aberto no mesmo navegador em que você o pediu. Se você tocou nele dentro do app de e-mail, copie o endereço e cole no Chrome ou Safari — ou peça um novo link por aqui.",
+  "link-expirado": "Esse link já expirou. Peça um novo abaixo.",
+  "link-invalido": "Link inválido. Tente entrar novamente.",
+};
+
 export function FormularioEntrar() {
   const router = useRouter();
   const parametros = useSearchParams();
@@ -18,13 +25,7 @@ export function FormularioEntrar() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [erro, setErro] = useState<string | null>(
-    parametros.get("erro") === "link-expirado"
-      ? "Esse link já expirou. Peça um novo abaixo."
-      : parametros.get("erro") === "link-invalido"
-        ? "Link inválido. Tente entrar novamente."
-        : null,
-  );
+  const [erro, setErro] = useState<string | null>(ERROS[parametros.get("erro") ?? ""] ?? null);
   const [aviso, setAviso] = useState<string | null>(null);
   const [enviando, iniciar] = useTransition();
 
@@ -87,9 +88,9 @@ export function FormularioEntrar() {
     iniciar(async () => {
       const supabase = criarClienteNavegador();
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        // O link cai no fluxo de confirmação e termina na tela de conta,
-        // onde a nova senha é escolhida.
-        redirectTo: `${location.origin}/auth/confirmar?proximo=${encodeURIComponent("/conta")}`,
+        // O link passa pela confirmação e cai direto na tela de escolher a
+        // nova senha, sem passar pelo login.
+        redirectTo: `${location.origin}/auth/confirmar?proximo=${encodeURIComponent("/redefinir-senha")}`,
       });
       if (error) return setErro(traduzir(error.message));
       setAviso("Enviamos um link para você escolher uma nova senha.");

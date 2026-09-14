@@ -31,7 +31,10 @@ export async function GET(request: Request) {
   if (codigo) {
     const { error } = await supabase.auth.exchangeCodeForSession(codigo);
     if (error) {
-      return NextResponse.redirect(new URL("/entrar?erro=link-expirado", url.origin));
+      // Esse fluxo exige que o link seja aberto no mesmo navegador que o pediu.
+      // Quem toca no link dentro do app de e-mail cai num navegador interno e
+      // chega aqui — a mensagem precisa dizer isso, não "link expirado".
+      return NextResponse.redirect(new URL("/entrar?erro=outro-navegador", url.origin));
     }
     return NextResponse.redirect(new URL(proximo, url.origin));
   }
