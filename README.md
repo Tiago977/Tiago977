@@ -54,13 +54,26 @@ cp .env.example .env.local
 
 ### 2. Banco de dados
 
-O schema já está aplicado no projeto Supabase conectado. As tabelas são
-`contas`, `pastas`, `documentos`, `documento_paginas`, `envios`, `envio_itens`,
-`conversas`, `conversa_membros` e `mensagens`, todas com RLS: cada pessoa só
-enxerga o que é seu, mais os documentos que recebeu em uma conversa.
+O schema completo está versionado em `supabase/migrations/`. Para aplicá-lo em
+um projeto novo:
+
+```bash
+supabase link --project-ref SEU-REF
+supabase db push
+```
+
+Antes disso, abra `supabase/migrations/20260914005103_digitalizador_cron_despacho.sql`
+e troque o host da URL pelo do seu projeto — é ele que o agendador chama.
+
+As tabelas são `contas`, `pastas`, `documentos`, `documento_paginas`, `envios`,
+`envio_itens`, `conversas`, `conversa_membros` e `mensagens`, todas com RLS:
+cada pessoa só enxerga o que é seu, mais os documentos que recebeu em uma
+conversa.
 
 Os arquivos ficam no bucket privado `documentos`, no caminho
 `{usuário}/{documento}/…`, e são servidos por links assinados temporários.
+
+A Edge Function do agendador fica em `supabase/functions/despachar-envios/`.
 
 ### 3. Envio de e-mail
 

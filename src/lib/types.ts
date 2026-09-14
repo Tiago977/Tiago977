@@ -51,6 +51,8 @@ export type Envio = {
   status: StatusEnvio;
   enviado_em: string | null;
   erro: string | null;
+  /** Momento em que o agendador reservou o envio; devolve à fila se travar. */
+  processando_desde: string | null;
   criado_em: string;
 };
 
