@@ -49,6 +49,18 @@ export function FormularioEntrar() {
           },
         });
         if (error) return setErro(traduzir(error.message));
+
+        // Para não revelar quem tem cadastro, o Supabase responde a um e-mail já
+        // existente como se tivesse dado certo, mas sem nenhuma identidade nova
+        // e sem enviar e-mail. Sem checar isso, a pessoa ficaria esperando para
+        // sempre uma mensagem que nunca vai chegar.
+        if (data.user && data.user.identities?.length === 0) {
+          setModo("entrar");
+          return setErro(
+            "Esse e-mail já tem uma conta. Entre com a senha dela ou use o link por e-mail abaixo.",
+          );
+        }
+
         if (!data.session) {
           return setAviso(
             "Conta criada. Confirme o e-mail que acabamos de enviar para entrar.",
