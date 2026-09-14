@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { criarClienteServidor } from "@/lib/supabase/server";
@@ -34,13 +35,16 @@ export default async function LayoutApp({ children }: { children: React.ReactNod
         <NavegacaoLateral />
 
         <div className="mt-auto space-y-2 border-t border-borda pt-3">
-          <div className="flex items-center gap-2.5 px-1">
+          <Link
+            href="/conta"
+            className="flex items-center gap-2.5 rounded-xl px-1 py-1.5 transition hover:bg-painel-suave"
+          >
             <Avatar texto={iniciais(nome, email)} />
             <div className="min-w-0">
               <p className="truncate text-[13px] font-medium">{nome}</p>
               <p className="truncate text-[11px] text-texto-suave">{email}</p>
             </div>
-          </div>
+          </Link>
           <form action="/auth/sair" method="post">
             <button
               type="submit"

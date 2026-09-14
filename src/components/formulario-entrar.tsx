@@ -79,6 +79,23 @@ export function FormularioEntrar() {
     });
   }
 
+  function recuperarSenha() {
+    setErro(null);
+    setAviso(null);
+    if (!validarEmail(email)) return setErro("Informe seu e-mail para redefinir a senha.");
+
+    iniciar(async () => {
+      const supabase = criarClienteNavegador();
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        // O link cai no fluxo de confirmação e termina na tela de conta,
+        // onde a nova senha é escolhida.
+        redirectTo: `${location.origin}/auth/confirmar?proximo=${encodeURIComponent("/conta")}`,
+      });
+      if (error) return setErro(traduzir(error.message));
+      setAviso("Enviamos um link para você escolher uma nova senha.");
+    });
+  }
+
   function enviarLink() {
     setErro(null);
     setAviso(null);
@@ -174,6 +191,17 @@ export function FormularioEntrar() {
         <Mail className="size-4" />
         Entrar com link por e-mail
       </Botao>
+
+      {modo === "entrar" ? (
+        <button
+          type="button"
+          onClick={recuperarSenha}
+          disabled={enviando}
+          className="mx-auto block text-[13px] text-texto-suave underline-offset-4 transition hover:text-texto hover:underline disabled:opacity-50"
+        >
+          Esqueci minha senha
+        </button>
+      ) : null}
     </form>
   );
 }

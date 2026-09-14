@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FolderClosed, ScanLine, Send, MessagesSquare } from "lucide-react";
+import {
+  CircleUserRound,
+  FolderClosed,
+  MessagesSquare,
+  ScanLine,
+  Send,
+} from "lucide-react";
 import { cn } from "@/lib/ui";
 
 const ITENS = [
@@ -11,6 +17,9 @@ const ITENS = [
   { href: "/envios", rotulo: "Envios", Icone: Send },
   { href: "/conversas", rotulo: "Conversas", Icone: MessagesSquare },
 ];
+
+// No celular não existe a barra lateral, então a conta entra na barra de baixo.
+const ITENS_CELULAR = [...ITENS, { href: "/conta", rotulo: "Conta", Icone: CircleUserRound }];
 
 export function NavegacaoLateral() {
   const caminho = usePathname();
@@ -50,7 +59,7 @@ export function NavegacaoInferior() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <ul className="mx-auto flex max-w-lg">
-        {ITENS.map(({ href, rotulo, Icone }) => {
+        {ITENS_CELULAR.map(({ href, rotulo, Icone }) => {
           const ativo = caminho.startsWith(href);
           return (
             <li key={href} className="flex-1">
