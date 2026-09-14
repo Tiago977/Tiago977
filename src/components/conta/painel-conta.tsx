@@ -30,10 +30,13 @@ export function PainelConta({
       const { data: sessao } = await supabase.auth.getUser();
       if (!sessao.user) throw new Error("Sessão expirada. Entre novamente.");
 
-      const { error } = await supabase
-        .from("contas")
-        .update({ nome: nome.trim() })
-        .eq("id", sessao.user.id);
+      // upsert em vez de update: contas anteriores ao gatilho de perfil podem
+      // ainda não ter linha, e um update silencioso não gravaria nada.
+      const { error } = await supabase.from("contas").upsert({
+        id: sessao.user.id,
+        nome: nome.trim(),
+        email: sessao.user.email ?? "",
+      });
       if (error) throw new Error(error.message);
 
       setAviso("Nome atualizado.");
