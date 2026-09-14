@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+:root {
+  --fundo: #f6f6f4;
+  --painel: #ffffff;
+  --painel-suave: #f1f1ee;
+  --borda: #e3e3df;
+  --borda-forte: #d0d0ca;
+  --texto: #1c1c1a;
+  --texto-suave: #6b6b64;
+  --acento: #2f6feb;
+  --acento-suave: #e8efff;
+  --acento-texto: #ffffff;
+  --perigo: #c0392b;
+  --sucesso: #1f7a4d;
+  --aviso: #a86b00;
+  --sombra: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    --fundo: #131315;
+    --painel: #1b1b1e;
+    --painel-suave: #232327;
+    --borda: #2d2d32;
+    --borda-forte: #3d3d44;
+    --texto: #ecece9;
+    --texto-suave: #9b9b95;
+    --acento: #6d9bff;
+    --acento-suave: #1e2a44;
+    --acento-texto: #0d1526;
+    --perigo: #ef6f61;
+    --sucesso: #57c08a;
+    --aviso: #d9a038;
+    --sombra: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  }
+}
+
+:root[data-tema="escuro"] {
+  --fundo: #131315;
+  --painel: #1b1b1e;
+  --painel-suave: #232327;
+  --borda: #2d2d32;
+  --borda-forte: #3d3d44;
+  --texto: #ecece9;
+  --texto-suave: #9b9b95;
+  --acento: #6d9bff;
+  --acento-suave: #1e2a44;
+  --acento-texto: #0d1526;
+  --perigo: #ef6f61;
+  --sucesso: #57c08a;
+  --aviso: #d9a038;
+  --sombra: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+}
+
+@theme inline {
+  --color-fundo: var(--fundo);
+  --color-painel: var(--painel);
+  --color-painel-suave: var(--painel-suave);
+  --color-borda: var(--borda);
+  --color-borda-forte: var(--borda-forte);
+  --color-texto: var(--texto);
+  --color-texto-suave: var(--texto-suave);
+  --color-acento: var(--acento);
+  --color-acento-suave: var(--acento-suave);
+  --color-acento-texto: var(--acento-texto);
+  --color-perigo: var(--perigo);
+  --color-sucesso: var(--sucesso);
+  --color-aviso: var(--aviso);
+  --shadow-painel: var(--sombra);
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+}
+
+* {
+  min-width: 0;
+}
+
+html {
+  color-scheme: light dark;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+::selection {
+  background: var(--acento-suave);
+  color: var(--texto);
+}
+
+:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* Esconde a barra de rolagem em faixas horizontais sem perder o gesto de rolar. */
+.rolagem-limpa {
+  scrollbar-width: none;
+}
+.rolagem-limpa::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.surgir {
+  animation: surgir 0.18s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
