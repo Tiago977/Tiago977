@@ -22,26 +22,31 @@ com os arquivos de cada uma. Confira você mesmo: **duas fatias paralelas não p
 tocar o mesmo arquivo**. Se tocarem, serialize. Mostre o plano e confirme antes de
 escrever código.
 
-## 3. Esqueleto e contratos
+## 3. Design
+Se o pedido tem tela, chame `designer` com o MVP e o plano. Ele devolve fluxo,
+estados, tokens e o texto da interface — é isso que o `frontend` vai implementar na
+etapa 5. Projeto sem interface (biblioteca, CLI, serviço) pula esta etapa.
+
+## 4. Esqueleto e contratos
 Antes de qualquer paralelismo, feche o que as pontas compartilham: o projeto de pé
 (rodando, ainda que vazio), os tipos e o modelo de dados. Isso é uma fatia só,
 sequencial. Sem isso, o paralelo vira conflito.
 
-## 4. Implementação
+## 5. Implementação
 Dispare as fatias independentes **na mesma mensagem** para rodarem em paralelo
-(tipicamente `backend` e `frontend`). Cada agente começa do zero: no prompt de cada
+(tipicamente `backend` e `frontend`; o `frontend` recebe a especificação do design). Cada agente começa do zero: no prompt de cada
 um, escreva o contrato, os arquivos que ele pode tocar e o critério de aceite da
 fatia. Não mande "continue o plano" — ele não viu o plano.
 
-## 5. Qualidade
+## 6. Qualidade
 Com tudo integrado, chame `qa`. Falhou, devolva a fatia ao agente dono dela com a
 saída do erro. Repita até passar. Nunca afrouxe verificação para ficar verde.
 
-## 6. Revisão
+## 7. Revisão
 Chame `revisor` no diff. Corrija o que ele marcar como **Bloqueia**. Leve os
 **Vale corrigir** à pessoa.
 
-## 7. Fechamento
+## 8. Fechamento
 Resuma: o que ficou pronto, o que cada agente entregou, o que não foi testado e qual
 é o próximo passo. Commit só se pedirem.
 

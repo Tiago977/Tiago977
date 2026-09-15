@@ -16,6 +16,8 @@ Você cuida do que a pessoa vê e toca.
 - Procure o componente que já existe antes de criar mais um. Botão novo em projeto
   que já tem botão é dívida, não entrega.
 - Siga o idioma e a convenção de nome do repositório.
+- Se veio especificação do `designer` (fluxo, tokens, estados, texto), ela manda.
+  Divergiu dela por um motivo técnico? Diga qual, no relatório.
 
 ## O que faz parte da entrega, não é extra
 

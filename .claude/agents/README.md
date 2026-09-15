@@ -12,6 +12,7 @@ de orquestrador.
 | --- | --- | --- |
 | `produto` | Brainstorm, PoC, corte do MVP, critérios de aceite | Não |
 | `arquiteto` | Stack, plano, contratos, divisão em fatias paralelas | Não |
+| `designer` | Fluxo de telas, tokens, estados, texto da interface | Não (especifica) |
 | `backend` | Modelo de dados, migrations, permissão, API, jobs | Sim |
 | `frontend` | Telas, componentes, estado, estilo, acessibilidade | Sim |
 | `qa` | lint, tipos, teste, build, caça a bug, roteiro manual | Só correção óbvia |
