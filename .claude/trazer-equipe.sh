@@ -1,18 +1,14 @@
 #!/usr/bin/env sh
-# Instala a equipe de agentes no SEU COMPUTADOR (~/.claude/), valendo em todos os
-# seus projetos locais.
+# Traz a equipe de agentes para o PROJETO ATUAL (./.claude/).
+# Use em sessão da web, onde cada sessão nasce limpa.
 #
-#   sh .claude/instalar-equipe.sh
+#   curl -fsSL https://raw.githubusercontent.com/Tiago977/Tiago977/main/.claude/trazer-equipe.sh | sh
 #
-# ou, sem clonar nada antes:
-#
-#   curl -fsSL https://raw.githubusercontent.com/Tiago977/Tiago977/main/.claude/instalar-equipe.sh | sh
-#
-# Não sobrescreve arquivo que já exista em ~/.claude/.
+# Não sobrescreve arquivo que já exista no projeto.
 set -eu
 
 origem_remota="https://github.com/Tiago977/Tiago977.git"
-destino="${HOME}/.claude"
+destino="$(pwd)/.claude"
 
 # Se o script está ao lado da equipe, usa o disco. Senão, busca no GitHub.
 aqui=$(CDPATH= cd -- "$(dirname -- "${0:-.}")" 2>/dev/null && pwd || echo "")
@@ -26,7 +22,7 @@ else
   origem="${temporario}/repositorio/.claude"
 fi
 
-instalados=0
+copiados=0
 for pasta in agents commands; do
   [ -d "${origem}/${pasta}" ] || continue
   mkdir -p "${destino}/${pasta}"
@@ -34,11 +30,11 @@ for pasta in agents commands; do
     [ -e "$arquivo" ] || continue
     alvo="${destino}/${pasta}/$(basename -- "$arquivo")"
     if [ -e "$alvo" ]; then
-      echo "já existe, mantido: ${alvo}"
+      echo "já existe, mantido: ${pasta}/$(basename -- "$alvo")"
     else
       cp "$arquivo" "$alvo"
-      echo "instalado: ${alvo}"
-      instalados=$((instalados + 1))
+      echo "trazido: ${pasta}/$(basename -- "$alvo")"
+      copiados=$((copiados + 1))
     fi
   done
 done
@@ -46,16 +42,16 @@ done
 # A documentação da equipe viaja junto.
 if [ -f "${origem}/EQUIPE.md" ] && [ ! -e "${destino}/EQUIPE.md" ]; then
   cp "${origem}/EQUIPE.md" "${destino}/EQUIPE.md"
-  echo "instalado: EQUIPE.md"
-  instalados=$((instalados + 1))
+  echo "trazido: EQUIPE.md"
+  copiados=$((copiados + 1))
 fi
 
 [ -n "$temporario" ] && rm -rf "$temporario"
 
 echo
-if [ "$instalados" -gt 0 ]; then
-  echo "Pronto: ${instalados} arquivo(s) em ${destino}."
-  echo "Abra o Claude Code em qualquer projeto seu e use /equipe."
+if [ "$copiados" -gt 0 ]; then
+  echo "Pronto: ${copiados} arquivo(s). A equipe vale neste projeto — use /equipe."
+  echo "Para guardar, não esqueça de commitar a pasta .claude/."
 else
-  echo "Nada a instalar: a equipe já estava em ${destino}."
+  echo "Nada a trazer: a equipe já estava aqui."
 fi

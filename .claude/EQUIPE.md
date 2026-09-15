@@ -37,13 +37,41 @@ usa o agente frontend para arrumar o estado vazio da lista
 usa o revisor no que eu acabei de mudar
 ```
 
-## Levar a equipe para outro lugar
+## Levar a equipe para onde você trabalha
 
-- **Em todos os seus projetos:** `sh .claude/instalar-equipe.sh` copia os agentes e o
-  comando para `~/.claude/`, sem sobrescrever o que já estiver lá.
-- **Em um projeto específico:** copie as pastas `.claude/agents/` e
-  `.claude/commands/` para a raiz dele. Agente do projeto tem prioridade sobre o de
-  `~/.claude/`, então dá para especializar um sem perder o resto.
+A equipe mora neste repositório, que é público. Os dois caminhos abaixo partem daqui.
+
+### No seu computador — uma vez, vale para sempre
+
+Instala em `~/.claude/`, de onde o Claude Code lê em **qualquer** pasta que você abrir,
+inclusive projeto que ainda não existe:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Tiago977/Tiago977/main/.claude/instalar-equipe.sh | sh
+```
+
+Ou, se você já clonou este repositório: `sh .claude/instalar-equipe.sh`.
+
+### Na web — uma vez por projeto
+
+Toda sessão da web nasce limpa, então o que vale é o que está **dentro do repositório**
+do projeto. Rode isto na raiz dele:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Tiago977/Tiago977/main/.claude/trazer-equipe.sh | sh
+```
+
+Os agentes passam a valer na hora, sem reiniciar a sessão. Commite a pasta `.claude/`
+para que o projeto continue com a equipe na próxima vez.
+
+Nenhum dos dois sobrescreve arquivo que já exista — dá para rodar de novo sem medo,
+e um agente que você tenha personalizado ali sobrevive.
+
+### Qual ganha, se os dois existirem
+
+O agente do projeto (`.claude/agents/` na pasta do trabalho) tem prioridade sobre o de
+`~/.claude/agents/`. Então dá para ter a equipe padrão instalada no computador e, em um
+projeto específico, sobrescrever só um deles — sem perder os outros.
 
 ## Como o paralelismo funciona de verdade
 
