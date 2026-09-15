@@ -1,25 +1,29 @@
 # Equipe de agentes
 
-Cada arquivo `.md` desta pasta é um agente especialista. Eles rodam em sessões
-separadas, com contexto próprio, e devolvem o resultado para a sessão principal —
-que faz o papel de orquestrador.
+Uma equipe de especialistas pronta para usar em **qualquer projeto** — nenhum deles
+assume linguagem, framework ou banco. Cada um começa lendo o repositório e seguindo
+a convenção que já está lá; em projeto novo, o `arquiteto` é quem escolhe a stack.
 
-| Agente | Cuida de | Escreve código? |
+Cada arquivo `.md` desta pasta é um agente. Eles rodam em sessões separadas, com
+contexto próprio, e devolvem o resultado para a sessão principal — que faz o papel
+de orquestrador.
+
+| Agente | Cuida de | Mexe no código? |
 | --- | --- | --- |
 | `produto` | Brainstorm, PoC, corte do MVP, critérios de aceite | Não |
-| `arquiteto` | Plano técnico, contratos, divisão em fatias paralelas | Não |
-| `backend-supabase` | Migrations, RLS, edge functions, `src/lib/` | Sim |
-| `frontend-next` | Rotas do App Router, componentes, Tailwind | Sim |
-| `qa` | lint, typecheck, build, roteiro de teste, caça a bug | Só correção óbvia |
+| `arquiteto` | Stack, plano, contratos, divisão em fatias paralelas | Não |
+| `backend` | Modelo de dados, migrations, permissão, API, jobs | Sim |
+| `frontend` | Telas, componentes, estado, estilo, acessibilidade | Sim |
+| `qa` | lint, tipos, teste, build, caça a bug, roteiro manual | Só correção óbvia |
 | `devops` | Ambiente, deploy, CI, migration em produção | Sim |
-| `revisor` | Revisão crítica e segurança do diff | Não |
+| `revisor` | Revisão crítica e segurança do diff | Não (sem `Edit`) |
 
 ## Como usar
 
-**Pipeline completo** — para uma funcionalidade nova ou um app novo:
+**Pipeline completo** — para um projeto novo ou uma funcionalidade nova:
 
 ```
-/equipe um modo de assinar o documento digitalizado com o dedo
+/equipe um app de controle de gastos com foto do recibo
 ```
 
 Isso toca a ideia por produto → arquiteto → implementação em paralelo → QA →
@@ -28,9 +32,17 @@ revisão, parando para você aprovar o escopo e o plano.
 **Um agente só** — quando você já sabe o que quer:
 
 ```
-usa o agente frontend-next para arrumar o estado vazio da tela de arquivos
+usa o agente frontend para arrumar o estado vazio da lista
 usa o revisor no que eu acabei de mudar
 ```
+
+## Levar a equipe para outro lugar
+
+- **Em todos os seus projetos:** `sh .claude/instalar-equipe.sh` copia os agentes e o
+  comando para `~/.claude/`, sem sobrescrever o que já estiver lá.
+- **Em um projeto específico:** copie as pastas `.claude/agents/` e
+  `.claude/commands/` para a raiz dele. Agente do projeto tem prioridade sobre o de
+  `~/.claude/`, então dá para especializar um sem perder o resto.
 
 ## Como o paralelismo funciona de verdade
 
@@ -51,6 +63,6 @@ Vale saber o limite antes de contar com ele:
 
 É markdown: edite o arquivo do agente para ajustar o comportamento, ou copie um
 existente para criar um novo. O campo `description` é o que decide quando o agente é
-escolhido — escreva ali *quando* usar, não só *o que* ele faz. O campo `tools`
-limita o que ele pode fazer (o `revisor`, por exemplo, não tem `Edit`: ele não
-consegue alterar nada, mesmo se quiser).
+escolhido — escreva ali *quando* usar, não só *o que* ele faz. O campo `tools` limita
+o que ele pode fazer (o `revisor`, por exemplo, não tem `Edit`: ele não consegue
+alterar nada, mesmo se quiser).
